@@ -1,1 +1,1 @@
-RF signal aquisition and processing experiments for education and curiosity.
+RF signal aquisition and processing experiments using Python for education and curiosity.

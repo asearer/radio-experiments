@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import sounddevice as sd
+import tkinter as tk
+from tkinter import ttk
 from rtlsdr import RtlSdr
 
 # Constants for UHF band
@@ -31,7 +32,16 @@ def start_capture():
     plot_spectrum(samples, SAMPLE_RATE)
 
 def main():
-    start_capture()
+    root = tk.Tk()
+    root.title("UHF Signal Visualization")
+
+    label = ttk.Label(root, text="Click below to start capturing and visualizing UHF signals:")
+    label.pack(pady=10)
+
+    capture_button = ttk.Button(root, text="Start Capture", command=start_capture)
+    capture_button.pack(pady=5)
+
+    root.mainloop()
 
 if __name__ == "__main__":
     main()

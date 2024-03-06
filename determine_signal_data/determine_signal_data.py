@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from rtlsdr import RtlSdr
+import tkinter as tk
+from tkinter import ttk
 
 def plot_spectrum(samples, sampling_rate):
     freq = np.fft.fftshift(np.fft.fftfreq(len(samples)) * sampling_rate)
@@ -16,28 +18,21 @@ def identify_data_type(samples, sampling_rate):
 
     # Simple classification based on peak frequency
     peak_freq = f[np.argmax(Pxx)]
-    if peak_freq < 10e3:
-        print("Type of data: Low frequency modulation (e.g., AM)")
-    elif 10e3 <= peak_freq < 300e3:
-        print("Type of data: Medium frequency modulation (e.g., FM)")
-    elif 300e3 <= peak_freq < 1e6:
-        print("Type of data: High frequency modulation (e.g., digital modulation)")
-    else:
-        print("Type of data: Unknown")
+    result_label.configure(text="Peak Frequency: {:.2f} Hz".format(peak_freq))
 
     # Check for audio or image data
+    content = ""
     if peak_freq > 20e3 and peak_freq < 20e6:  # Audio frequency range
-        print("Content: Audio")
+        content = "Audio"
     elif peak_freq > 20e6 and peak_freq < 1e9:  # Image frequency range
-        print("Content: Image")
+        content = "Image"
     else:
-        print("Content: Unknown")
+        content = "Unknown"
+    content_label.configure(text="Content: " + content)
 
-def main():
-    # Configure RTL-SDR device
-    sdr = RtlSdr()
-    freq_unit = input("Enter frequency unit (Hz, kHz, MHz, GHz): ").lower()
-    center_freq = float(input("Enter center frequency: "))
+def capture_and_analyze():
+    center_freq = float(center_freq_entry.get())
+    freq_unit = freq_unit_combobox.get().lower()
 
     # Convert center frequency to Hz
     if freq_unit == 'khz':
@@ -47,6 +42,7 @@ def main():
     elif freq_unit == 'ghz':
         center_freq *= 1e9
 
+    sdr = RtlSdr()
     sdr.sample_rate = 2.4e6  # Hz
     sdr.center_freq = center_freq
     sdr.freq_correction = 60   # PPM
@@ -65,5 +61,33 @@ def main():
     # Close device
     sdr.close()
 
-if __name__ == "__main__":
-    main()
+# GUI setup
+root = tk.Tk()
+root.title("Radio Signal Analyzer")
+
+# Center Frequency Entry
+center_freq_label = ttk.Label(root, text="Center Frequency:")
+center_freq_label.grid(row=0, column=0)
+center_freq_entry = ttk.Entry(root)
+center_freq_entry.grid(row=0, column=1)
+center_freq_entry.insert(tk.END, "433")  # default value
+
+# Frequency Unit Combobox
+freq_unit_label = ttk.Label(root, text="Frequency Unit:")
+freq_unit_label.grid(row=1, column=0)
+freq_units = ["Hz", "kHz", "MHz", "GHz"]
+freq_unit_combobox = ttk.Combobox(root, values=freq_units)
+freq_unit_combobox.grid(row=1, column=1)
+freq_unit_combobox.current(1)  # set default value to kHz
+
+# Capture Button
+capture_button = ttk.Button(root, text="Capture and Analyze", command=capture_and_analyze)
+capture_button.grid(row=2, column=0, columnspan=2)
+
+# Result Labels
+result_label = ttk.Label(root, text="")
+result_label.grid(row=3, column=0, columnspan=2)
+content_label = ttk.Label(root, text="")
+content_label.grid(row=4, column=0, columnspan=2)
+
+root.mainloop()

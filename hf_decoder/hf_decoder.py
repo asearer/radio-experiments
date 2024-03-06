@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from rtlsdr import RtlSdr
+import tkinter as tk
+from tkinter import ttk
 
 # Constants
 SAMPLE_RATE = 2.4e6  # Sample rate of RTL-SDR
@@ -23,12 +25,23 @@ def plot_spectrum(samples, sample_rate):
     plt.title('Frequency Spectrum')
     plt.show()
 
-def main():
+def start_capture():
     sdr = RtlSdr()
     samples = capture_samples(sdr, NUM_SAMPLES, CENTER_FREQ, SAMPLE_RATE)
     sdr.close()
-
     plot_spectrum(samples, SAMPLE_RATE)
+
+def main():
+    root = tk.Tk()
+    root.title("HF Radio Signal Visualization")
+
+    label = ttk.Label(root, text="Click below to start capturing and visualizing HF radio signals:")
+    label.pack(pady=10)
+
+    capture_button = ttk.Button(root, text="Start Capture", command=start_capture)
+    capture_button.pack(pady=5)
+
+    root.mainloop()
 
 if __name__ == "__main__":
     main()

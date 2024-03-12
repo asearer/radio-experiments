@@ -5,17 +5,22 @@ import math
 def calculate_antenna_angle(distance, height):
     """
     Calculate the appropriate antenna angle based on distance and height.
+    
     Args:
-    - distance: Distance from the antenna to the target (in meters).
-    - height: Height of the antenna above the ground (in meters).
+        distance (float): Distance from the antenna to the target (in meters).
+        height (float): Height of the antenna above the ground (in meters).
+    
     Returns:
-    - The calculated angle in degrees.
+        float: The calculated angle in degrees.
     """
     angle_radians = math.atan(height / distance)
     angle_degrees = math.degrees(angle_radians)
     return angle_degrees
 
 def calculate_angle():
+    """
+    Calculate the antenna angle and display the result.
+    """
     try:
         distance = float(distance_entry.get())
         height = float(height_entry.get())

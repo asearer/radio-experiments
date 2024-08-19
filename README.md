@@ -11,7 +11,7 @@ This repository is a compilation of Python scripts and tools for acquiring and p
 - **RF Signal Acquisition**: Experimental tools to interface with RF hardware for capturing signals.
 - **Signal Processing**: Algorithms and methods developed for analyzing and processing RF signals.
 - **Visualization**: Functions for visualizing signal data to help in interpretation and analysis.
-- **Educational Examples**: Sample scripts and Jupyter notebooks that showcase key concepts and techniques derived from my own experiments.
+- **Educational Examples**: Sample scripts that showcase key concepts and techniques derived from my own experiments.
 
 Happy experimenting with RF signals!
 
